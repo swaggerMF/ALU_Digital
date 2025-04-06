@@ -58,7 +58,7 @@
       <elementAttributes>
         <entry>
           <string>Label</string>
-          <string>Q[0]</string>
+          <string>Q0</string>
         </entry>
       </elementAttributes>
       <pos x="120" y="680"/>
@@ -68,7 +68,7 @@
       <elementAttributes>
         <entry>
           <string>Label</string>
-          <string>Q[-1]</string>
+          <string>Q-1</string>
         </entry>
       </elementAttributes>
       <pos x="120" y="760"/>
@@ -78,7 +78,7 @@
       <elementAttributes>
         <entry>
           <string>Label</string>
-          <string>A[7]</string>
+          <string>A7</string>
         </entry>
       </elementAttributes>
       <pos x="120" y="840"/>
