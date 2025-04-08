@@ -147,19 +147,19 @@
       <elementName>Splitter</elementName>
       <elementAttributes>
         <entry>
-          <string>mirror</string>
-          <boolean>true</boolean>
-        </entry>
-        <entry>
           <string>rotation</string>
-          <rotation rotation="1"/>
+          <rotation rotation="3"/>
         </entry>
         <entry>
           <string>Input Splitting</string>
+          <string>8</string>
+        </entry>
+        <entry>
+          <string>Output Splitting</string>
           <string>1,1,1,1,1,1,1,1</string>
         </entry>
       </elementAttributes>
-      <pos x="840" y="-280"/>
+      <pos x="840" y="-300"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -183,19 +183,19 @@
       <elementName>Splitter</elementName>
       <elementAttributes>
         <entry>
-          <string>mirror</string>
-          <boolean>true</boolean>
-        </entry>
-        <entry>
           <string>rotation</string>
-          <rotation rotation="1"/>
+          <rotation rotation="3"/>
         </entry>
         <entry>
           <string>Input Splitting</string>
+          <string>8</string>
+        </entry>
+        <entry>
+          <string>Output Splitting</string>
           <string>1,1,1,1,1,1,1,1</string>
         </entry>
       </elementAttributes>
-      <pos x="1900" y="-320"/>
+      <pos x="1900" y="-340"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -213,7 +213,7 @@
           <int>8</int>
         </entry>
       </elementAttributes>
-      <pos x="1900" y="-480"/>
+      <pos x="1900" y="-520"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -650,12 +650,12 @@
       <p2 x="940" y="320"/>
     </wire>
     <wire>
-      <p1 x="1900" y="-480"/>
-      <p2 x="1900" y="-340"/>
-    </wire>
-    <wire>
       <p1 x="1900" y="-320"/>
       <p2 x="1900" y="-100"/>
+    </wire>
+    <wire>
+      <p1 x="1900" y="-520"/>
+      <p2 x="1900" y="-340"/>
     </wire>
     <wire>
       <p1 x="1840" y="-320"/>
