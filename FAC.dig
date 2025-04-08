@@ -102,20 +102,6 @@
       <pos x="400" y="20"/>
     </visualElement>
     <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>Ci</string>
-        </entry>
-      </elementAttributes>
-      <pos x="680" y="60"/>
-    </visualElement>
-    <visualElement>
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
@@ -160,6 +146,20 @@
         </entry>
       </elementAttributes>
       <pos x="-100" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>C_in</string>
+        </entry>
+      </elementAttributes>
+      <pos x="580" y="60"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -208,24 +208,24 @@
       <p2 x="40" y="280"/>
     </wire>
     <wire>
+      <p1 x="120" y="60"/>
+      <p2 x="160" y="60"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="60"/>
+      <p2 x="580" y="60"/>
+    </wire>
+    <wire>
+      <p1 x="160" y="60"/>
+      <p2 x="440" y="60"/>
+    </wire>
+    <wire>
       <p1 x="120" y="300"/>
       <p2 x="180" y="300"/>
     </wire>
     <wire>
       <p1 x="180" y="300"/>
       <p2 x="380" y="300"/>
-    </wire>
-    <wire>
-      <p1 x="120" y="60"/>
-      <p2 x="160" y="60"/>
-    </wire>
-    <wire>
-      <p1 x="440" y="60"/>
-      <p2 x="680" y="60"/>
-    </wire>
-    <wire>
-      <p1 x="160" y="60"/>
-      <p2 x="440" y="60"/>
     </wire>
     <wire>
       <p1 x="400" y="20"/>
