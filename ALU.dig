@@ -858,7 +858,7 @@
           <string>rst</string>
         </entry>
       </elementAttributes>
-      <pos x="-40" y="1920"/>
+      <pos x="-40" y="1940"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
@@ -1364,7 +1364,7 @@
           <string>c3</string>
         </entry>
       </elementAttributes>
-      <pos x="40" y="2220"/>
+      <pos x="100" y="2240"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -1378,7 +1378,7 @@
           <string>c3</string>
         </entry>
       </elementAttributes>
-      <pos x="380" y="2220"/>
+      <pos x="440" y="2240"/>
     </visualElement>
     <visualElement>
       <elementName>D_FF</elementName>
@@ -1425,6 +1425,16 @@
           <string>wideShape</string>
           <boolean>true</boolean>
         </entry>
+        <entry>
+          <string>inverterConfig</string>
+          <inverterConfig>
+            <string>In_1</string>
+          </inverterConfig>
+        </entry>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
       </elementAttributes>
       <pos x="-40" y="1920"/>
     </visualElement>
@@ -1465,58 +1475,6 @@
         </entry>
       </elementAttributes>
       <pos x="20" y="2140"/>
-    </visualElement>
-    <visualElement>
-      <elementName>D_FF</elementName>
-      <elementAttributes>
-        <entry>
-          <string>inverterConfig</string>
-          <inverterConfig>
-            <string>C</string>
-          </inverterConfig>
-        </entry>
-      </elementAttributes>
-      <pos x="40" y="2220"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>clk</string>
-        </entry>
-      </elementAttributes>
-      <pos x="20" y="2240"/>
-    </visualElement>
-    <visualElement>
-      <elementName>D_FF</elementName>
-      <elementAttributes>
-        <entry>
-          <string>inverterConfig</string>
-          <inverterConfig>
-            <string>C</string>
-          </inverterConfig>
-        </entry>
-      </elementAttributes>
-      <pos x="380" y="2220"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>clk</string>
-        </entry>
-      </elementAttributes>
-      <pos x="360" y="2240"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
@@ -1574,6 +1532,39 @@
         </entry>
       </elementAttributes>
       <pos x="380" y="2140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>XOr</elementName>
+      <elementAttributes/>
+      <pos x="-120" y="1900"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Q[0]</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-120" y="1900"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Q[-1]</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-120" y="1940"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -2242,6 +2233,10 @@
       <p2 x="100" y="2140"/>
     </wire>
     <wire>
+      <p1 x="100" y="2220"/>
+      <p2 x="100" y="2240"/>
+    </wire>
+    <wire>
       <p1 x="-1000" y="860"/>
       <p2 x="-1000" y="880"/>
     </wire>
@@ -2292,6 +2287,10 @@
     <wire>
       <p1 x="440" y="880"/>
       <p2 x="440" y="1100"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="2220"/>
+      <p2 x="440" y="2240"/>
     </wire>
     <wire>
       <p1 x="-60" y="740"/>
