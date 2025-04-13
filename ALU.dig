@@ -606,7 +606,7 @@
           <string>cnt7</string>
         </entry>
       </elementAttributes>
-      <pos x="460" y="1520"/>
+      <pos x="460" y="1500"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -1806,6 +1806,11 @@
       </elementAttributes>
       <pos x="640" y="1380"/>
     </visualElement>
+    <visualElement>
+      <elementName>Probe</elementName>
+      <elementAttributes/>
+      <pos x="480" y="1560"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -1870,7 +1875,7 @@
     </wire>
     <wire>
       <p1 x="200" y="1540"/>
-      <p2 x="360" y="1540"/>
+      <p2 x="340" y="1540"/>
     </wire>
     <wire>
       <p1 x="-660" y="1540"/>
@@ -1971,6 +1976,10 @@
     <wire>
       <p1 x="-480" y="1560"/>
       <p2 x="-240" y="1560"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="1560"/>
+      <p2 x="480" y="1560"/>
     </wire>
     <wire>
       <p1 x="160" y="2200"/>
@@ -2365,6 +2374,10 @@
       <p2 x="360" y="1500"/>
     </wire>
     <wire>
+      <p1 x="420" y="1500"/>
+      <p2 x="460" y="1500"/>
+    </wire>
+    <wire>
       <p1 x="320" y="2140"/>
       <p2 x="340" y="2140"/>
     </wire>
@@ -2481,12 +2494,16 @@
       <p2 x="-140" y="1520"/>
     </wire>
     <wire>
-      <p1 x="420" y="1520"/>
-      <p2 x="460" y="1520"/>
-    </wire>
-    <wire>
       <p1 x="200" y="1520"/>
       <p2 x="240" y="1520"/>
+    </wire>
+    <wire>
+      <p1 x="420" y="1520"/>
+      <p2 x="440" y="1520"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="1520"/>
+      <p2 x="360" y="1520"/>
     </wire>
     <wire>
       <p1 x="-400" y="1520"/>
@@ -2685,6 +2702,10 @@
       <p2 x="660" y="1360"/>
     </wire>
     <wire>
+      <p1 x="340" y="1520"/>
+      <p2 x="340" y="1540"/>
+    </wire>
+    <wire>
       <p1 x="-1240" y="700"/>
       <p2 x="-1240" y="1200"/>
     </wire>
@@ -2855,6 +2876,10 @@
     <wire>
       <p1 x="440" y="2220"/>
       <p2 x="440" y="2240"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="1520"/>
+      <p2 x="440" y="1560"/>
     </wire>
     <wire>
       <p1 x="-380" y="860"/>
