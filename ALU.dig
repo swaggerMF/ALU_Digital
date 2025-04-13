@@ -1514,14 +1514,14 @@
       <elementName>And</elementName>
       <elementAttributes>
         <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+        <entry>
           <string>inverterConfig</string>
           <inverterConfig>
             <string>In_1</string>
           </inverterConfig>
-        </entry>
-        <entry>
-          <string>Bits</string>
-          <int>8</int>
         </entry>
       </elementAttributes>
       <pos x="-320" y="2320"/>
@@ -1559,6 +1559,16 @@
         </entry>
       </elementAttributes>
       <pos x="-120" y="1660"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>c7.5</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-140" y="1740"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -1973,6 +1983,10 @@
     <wire>
       <p1 x="860" y="1100"/>
       <p2 x="940" y="1100"/>
+    </wire>
+    <wire>
+      <p1 x="-180" y="1740"/>
+      <p2 x="-140" y="1740"/>
     </wire>
     <wire>
       <p1 x="940" y="1620"/>
