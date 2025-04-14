@@ -317,6 +317,75 @@ module Mux_4x1_NBits #(
     end
 endmodule
 
+
+module Mux_2x1_NBits #(
+    parameter Bits = 2
+)
+(
+    input [0:0] sel,
+    input [(Bits - 1):0] in_0,
+    input [(Bits - 1):0] in_1,
+    output reg [(Bits - 1):0] out
+);
+    always @ (*) begin
+        case (sel)
+            1'h0: out = in_0;
+            1'h1: out = in_1;
+            default:
+                out = 'h0;
+        endcase
+    end
+endmodule
+
+
+module DIG_Counter_Nbit
+#(
+    parameter Bits = 2
+)
+(
+    output [(Bits-1):0] out,
+    output ovf,
+    input C,
+    input en,
+    input clr
+);
+    reg [(Bits-1):0] count;
+
+    always @ (posedge C) begin
+        if (clr)
+          count <= 'h0;
+        else if (en)
+          count <= count + 1'b1;
+    end
+
+    assign out = count;
+    assign ovf = en? &count : 1'b0;
+
+    initial begin
+        count = 'h0;
+    end
+endmodule
+
+
+module DIG_Register_BUS #(
+    parameter Bits = 1
+)
+(
+    input C,
+    input en,
+    input [(Bits - 1):0]D,
+    output [(Bits - 1):0]Q
+);
+
+    reg [(Bits - 1):0] state = 'h0;
+
+    assign Q = state;
+
+    always @ (posedge C) begin
+        if (en)
+            state <= D;
+   end
+endmodule
 module DIG_D_FF_1bit
 #(
     parameter Default = 0
@@ -341,103 +410,6 @@ module DIG_D_FF_1bit
     end
 endmodule
 
-
-module cnt7 (
-  input CLK,
-  input RST,
-  output CNT7
-);
-  wire s0;
-  wire s1;
-  wire s2;
-  wire s3;
-  wire s4;
-  wire s5;
-  DIG_JK_FF_AS #(
-    .Default(0)
-  )
-  DIG_JK_FF_AS_i0 (
-    .Set( 1'b0 ),
-    .J( 1'b1 ),
-    .C( CLK ),
-    .K( 1'b1 ),
-    .Clr( RST ),
-    .Q( s0 ),
-    .\~Q ( s1 )
-  );
-  DIG_JK_FF_AS #(
-    .Default(0)
-  )
-  DIG_JK_FF_AS_i1 (
-    .Set( 1'b0 ),
-    .J( 1'b1 ),
-    .C( s1 ),
-    .K( 1'b1 ),
-    .Clr( RST ),
-    .Q( s2 ),
-    .\~Q ( s3 )
-  );
-  DIG_JK_FF_AS #(
-    .Default(0)
-  )
-  DIG_JK_FF_AS_i2 (
-    .Set( 1'b0 ),
-    .J( 1'b1 ),
-    .C( s3 ),
-    .K( 1'b1 ),
-    .Clr( RST ),
-    .Q( s4 )
-  );
-  assign s5 = (s0 & s2 & s4);
-  DIG_D_FF_1bit #(
-    .Default(0)
-  )
-  DIG_D_FF_1bit_i3 (
-    .D( s5 ),
-    .C( CLK ),
-    .Q( CNT7 )
-  );
-endmodule
-
-module Mux_2x1_NBits #(
-    parameter Bits = 2
-)
-(
-    input [0:0] sel,
-    input [(Bits - 1):0] in_0,
-    input [(Bits - 1):0] in_1,
-    output reg [(Bits - 1):0] out
-);
-    always @ (*) begin
-        case (sel)
-            1'h0: out = in_0;
-            1'h1: out = in_1;
-            default:
-                out = 'h0;
-        endcase
-    end
-endmodule
-
-
-module DIG_Register_BUS #(
-    parameter Bits = 1
-)
-(
-    input C,
-    input en,
-    input [(Bits - 1):0]D,
-    output [(Bits - 1):0]Q
-);
-
-    reg [(Bits - 1):0] state = 'h0;
-
-    assign Q = state;
-
-    always @ (posedge C) begin
-        if (en)
-            state <= D;
-   end
-endmodule
 
 module FAC (
   input X,
@@ -778,37 +750,43 @@ module ALU (
   wire c7;
   wire c8;
   wire c6;
+  wire \c7.5 ;
   wire [7:0] s0;
-  wire [7:0] A;
-  wire [7:0] add;
   wire [7:0] s1;
-  wire s2;
+  wire [7:0] add;
+  wire [7:0] s2;
+  wire s3;
   wire [7:0] Q;
-  wire [7:0] s3;
   wire [7:0] s4;
   wire [7:0] s5;
+  wire [7:0] s6;
   wire O_SR;
-  wire s6;
-  wire [7:0] s7;
-  wire s8;
-  wire [1:0] s9;
+  wire s7;
+  wire [7:0] s8;
+  wire s9;
+  wire [7:0] A;
+  wire [1:0] s10;
   wire [7:0] O_A;
-  wire s10;
   wire s11;
-  wire s12;
+  wire [1:0] s12;
+  wire [7:0] s13;
   wire [7:0] O_Q;
-  wire s13;
-  wire [6:0] s14;
+  wire s14;
   wire [6:0] s15;
-  wire s16;
+  wire [6:0] s16;
+  wire s17;
   wire [7:0] in;
   wire L;
-  wire s17;
   wire s18;
   wire s19;
   wire s20;
+  wire s21;
   wire shft;
-  wire [7:0] s21;
+  wire [7:0] s22;
+  wire s23;
+  wire s24;
+  wire [3:0] s25;
+  assign s24 = (op[0] & op[1]);
   ALU_CU ALU_CU_i0 (
     .BGN( \Begin  ),
     .RST( RST ),
@@ -829,7 +807,8 @@ module ALU (
     .c5( c5 ),
     .c7( c7 ),
     .c8( c8 ),
-    .c6( c6 )
+    .c6( c6 ),
+    .\c7.5 ( \c7.5  )
   );
   DriverBus #(
     .Bits(8)
@@ -837,116 +816,118 @@ module ALU (
   DriverBus_i1 (
     .in( inbus ),
     .sel( c2 ),
-    .out( s3 )
+    .out( s4 )
   );
   Mux_4x1_NBits #(
     .Bits(8)
   )
   Mux_4x1_NBits_i2 (
-    .sel( s9 ),
+    .sel( s10 ),
     .in_0( 8'b0 ),
     .in_1( inbus ),
-    .in_2( add ),
-    .in_3( O_A ),
-    .out( s7 )
+    .in_2( O_A ),
+    .in_3( add ),
+    .out( s8 )
   );
-  cnt7 cnt7_i3 (
-    .CLK( s11 ),
-    .RST( RST ),
-    .CNT7( cnt7 )
+  Mux_4x1_NBits #(
+    .Bits(8)
+  )
+  Mux_4x1_NBits_i3 (
+    .sel( s12 ),
+    .in_0( s13 ),
+    .in_1( inbus ),
+    .in_2( O_Q ),
+    .in_3( s13 ),
+    .out( s2 )
   );
   Mux_2x1_NBits #(
     .Bits(8)
   )
   Mux_2x1_NBits_i4 (
-    .sel( s12 ),
-    .in_0( inbus ),
-    .in_1( O_Q ),
+    .sel( s24 ),
+    .in_0( A ),
+    .in_1( O_A ),
     .out( s1 )
   );
-  assign s11 = (c6 | RST);
+  DIG_Counter_Nbit #(
+    .Bits(4)
+  )
+  DIG_Counter_Nbit_i5 (
+    .en( c6 ),
+    .C( CLk ),
+    .clr( RST ),
+    .out( s25 )
+  );
   // M
   DIG_Register_BUS #(
     .Bits(8)
   )
-  DIG_Register_BUS_i5 (
-    .D( s3 ),
+  DIG_Register_BUS_i6 (
+    .D( s4 ),
     .C( CLk ),
     .en( c2 ),
-    .Q( s4 )
+    .Q( s5 )
   );
-  assign s5[0] = c4;
-  assign s5[1] = c4;
-  assign s5[2] = c4;
-  assign s5[3] = c4;
-  assign s5[4] = c4;
-  assign s5[5] = c4;
-  assign s5[6] = c4;
-  assign s5[7] = c4;
+  assign s6[0] = c4;
+  assign s6[1] = c4;
+  assign s6[2] = c4;
+  assign s6[3] = c4;
+  assign s6[4] = c4;
+  assign s6[5] = c4;
+  assign s6[6] = c4;
+  assign s6[7] = c4;
   assign L = (~ cR & ~ cL);
   assign shft = (cL | cR);
-  assign s21[0] = c3;
-  assign s21[1] = c3;
-  assign s21[2] = c3;
-  assign s21[3] = c3;
-  assign s21[4] = c3;
-  assign s21[5] = c3;
-  assign s21[6] = c3;
-  assign s21[7] = c3;
-  assign s0 = (s5 ^ s4);
-  DIG_D_FF_1bit #(
-    .Default(0)
-  )
-  DIG_D_FF_1bit_i6 (
-    .D( shft ),
-    .C( CLk ),
-    .Q( s10 )
-  );
+  assign s22[0] = c3;
+  assign s22[1] = c3;
+  assign s22[2] = c3;
+  assign s22[3] = c3;
+  assign s22[4] = c3;
+  assign s22[5] = c3;
+  assign s22[6] = c3;
+  assign s22[7] = c3;
+  assign cnt7 = (~ s25[0] & ~ s25[1] & ~ s25[2] & s25[3]);
+  assign s0 = (s6 ^ s5);
   DIG_D_FF_1bit #(
     .Default(0)
   )
   DIG_D_FF_1bit_i7 (
     .D( shft ),
     .C( CLk ),
-    .Q( s13 )
+    .Q( s11 )
   );
-  assign s9[0] = (\c0'  | s10);
-  assign s9[1] = (c3 | s10);
-  assign s8 = (c0 | \c0'  | c3 | s10);
-  assign s12 = (~ c1 & s13);
-  assign s2 = (c1 | s13);
-  assign s6 = (c1 | s13);
+  DIG_D_FF_1bit #(
+    .Default(0)
+  )
+  DIG_D_FF_1bit_i8 (
+    .D( shft ),
+    .C( CLk ),
+    .Q( s14 )
+  );
+  // Parallel-Adder
+  RCA8 RCA8_i9 (
+    .c_in( c4 ),
+    .Y( s0 ),
+    .X( s1 ),
+    .Z( add )
+  );
+  assign s10[0] = (\c0'  | c3);
+  assign s10[1] = (s11 | c3);
+  assign s9 = (c0 | \c0'  | c3 | s11);
+  assign s3 = (c1 | c5 | s14);
+  assign s7 = (c1 | s14);
+  assign s12[0] = (c1 | c5);
+  assign s12[1] = (c5 | s14);
   // Q
   DIG_Register_BUS #(
     .Bits(8)
   )
-  DIG_Register_BUS_i8 (
-    .D( s1 ),
+  DIG_Register_BUS_i10 (
+    .D( s2 ),
     .C( CLk ),
-    .en( s2 ),
+    .en( s3 ),
     .Q( Q )
   );
-  // A
-  DIG_Register_BUS #(
-    .Bits(8)
-  )
-  DIG_Register_BUS_i9 (
-    .D( s7 ),
-    .C( CLk ),
-    .en( s8 ),
-    .Q( A )
-  );
-  // Parallel-Adder
-  RCA8 RCA8_i10 (
-    .c_in( c4 ),
-    .Y( s0 ),
-    .X( A ),
-    .Z( add )
-  );
-  assign \Q[0]  = Q[0];
-  assign s14 = Q[7:1];
-  assign s15 = A[6:0];
-  assign \A[7]  = A[7];
   DriverBus #(
     .Bits(8)
   )
@@ -955,44 +936,67 @@ module ALU (
     .sel( c3 ),
     .out( outbus )
   );
-  assign s19 = ~ \A[7] ;
-  assign in = ((add & s21) | (~ s21 & A));
+  // A
+  DIG_Register_BUS #(
+    .Bits(8)
+  )
+  DIG_Register_BUS_i12 (
+    .D( s8 ),
+    .C( CLk ),
+    .en( s9 ),
+    .Q( A )
+  );
+  assign in = ((add & s22) | (~ s22 & A));
+  assign \Q[0]  = Q[0];
+  assign s15 = Q[7:1];
+  assign s16 = A[6:0];
+  assign \A[7]  = A[7];
+  assign s23 = Q[0];
+  assign s20 = ~ \A[7] ;
+  assign s13[0] = (~ \c7.5  & ~ \A[7]  & c5);
+  assign s13[1] = Q[1];
+  assign s13[2] = Q[2];
+  assign s13[3] = Q[3];
+  assign s13[4] = Q[4];
+  assign s13[5] = Q[5];
+  assign s13[6] = Q[6];
+  assign s13[7] = Q[7];
   // Q[-1]
-  DIG_Register DIG_Register_i12 (
+  DIG_Register DIG_Register_i13 (
     .D( O_SR ),
     .C( CLk ),
-    .en( s6 ),
+    .en( s7 ),
     .Q( \Q[-1]  )
-  );
-  shf2 shf2_i13 (
-    .CLK( CLk ),
-    .SR( cR ),
-    .SL( cL ),
-    .IN_SR( \A[7]  ),
-    .IN_SL( s16 ),
-    .IN( in ),
-    .LD( L ),
-    .O_sr( s17 ),
-    .O_sl( s18 ),
-    .O( O_A )
   );
   shf2 shf2_i14 (
     .CLK( CLk ),
     .SR( cR ),
     .SL( cL ),
-    .IN_SR( s17 ),
-    .IN_SL( s19 ),
+    .IN_SR( \A[7]  ),
+    .IN_SL( s17 ),
+    .IN( in ),
+    .LD( L ),
+    .O_sr( s18 ),
+    .O_sl( s19 ),
+    .O( O_A )
+  );
+  shf2 shf2_i15 (
+    .CLK( CLk ),
+    .SR( cR ),
+    .SL( cL ),
+    .IN_SR( s18 ),
+    .IN_SL( s20 ),
     .IN( Q ),
     .LD( L ),
-    .O_sr( s20 ),
-    .O_sl( s16 ),
+    .O_sr( s21 ),
+    .O_sl( s17 ),
     .O( O_Q )
   );
   DIG_D_FF_1bit #(
     .Default(0)
   )
-  DIG_D_FF_1bit_i15 (
-    .D( s20 ),
+  DIG_D_FF_1bit_i16 (
+    .D( s21 ),
     .C( CLk ),
     .Q( O_SR )
   );
