@@ -108,12 +108,12 @@ endmodule
 
 module Dec3to5 (
   input sel,
-  output \0 ,
-  output \1 ,
-  output \2 ,
-  output \3 ,
-  output \4 ,
-  output \5 
+  output O0,
+  output O1,
+  output O2,
+  output O3,
+  output O4,
+  output O5
 );
   wire s0;
   wire s1;
@@ -127,12 +127,12 @@ module Dec3to5 (
   assign s2 = ~ s5;
   assign s1 = ~ s4;
   assign s0 = ~ s3;
-  assign \0  = (s0 & s1 & s2);
-  assign \1  = (s2 & s1 & s3);
-  assign \2  = (s2 & s4 & s0);
-  assign \3  = (s2 & s4 & s3);
-  assign \4  = (s5 & s1 & s0);
-  assign \5  = (s5 & s1 & s3);
+  assign O0 = (s0 & s1 & s2);
+  assign O1 = (s2 & s1 & s3);
+  assign O2 = (s2 & s4 & s0);
+  assign O3 = (s2 & s4 & s3);
+  assign O4 = (s5 & s1 & s0);
+  assign O5 = (s5 & s1 & s3);
 endmodule
 
 module sequnceCNTmod (
@@ -164,12 +164,12 @@ module sequnceCNTmod (
   );
   Dec3to5 Dec3to5_i2 (
     .sel( s2 ),
-    .\0 ( \?0  ),
-    .\1 ( \?1  ),
-    .\2 ( \?2  ),
-    .\3 ( \?3  ),
-    .\4 ( \?4  ),
-    .\5 ( \?5  )
+    .O0( \?0  ),
+    .O1( \?1  ),
+    .O2( \?2  ),
+    .O3( \?3  ),
+    .O4( \?4  ),
+    .O5( \?5  )
   );
 endmodule
 
