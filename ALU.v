@@ -240,13 +240,14 @@ module ALU_CU (
     .\?5 ( s5 )
   );
   assign c0 = (s12 & s0 & s14);
-  assign \c0'  = (s0 & s13 & s14);
+  assign \c0'  = (s0 & ~ s12 & s14);
+  assign c1 = (s14 & (s13 | s12) & s1);
   assign c3_temp = (((adun | scad) & s3) | (s12 & (Q0 ^ \Q-1 ) & s0 & s_C2) | (s_C2 & s13 & s3 & A7) | (A7 & C3 & s13 & s0) | (s_C2 & s1 & s13));
   assign c4 = ((c3_temp & scad) | (c3_temp & s12 & Q0 & ~ \Q-1 ) | (c3_temp & s1 & s13));
   assign cR = (s12 & s_C2 & ~ CNT7 & s1);
   assign cL = (s13 & s0 & s_C2);
   assign c5 = (s13 & s2 & s_C2);
-  assign c7 = (C3 & ((s12 & C3 & s0) | (C3 & s1 & s13)));
+  assign c7 = (C3 & (adun | (s12 & s0) | (s1 & s13) | scad));
   assign c6 = ((s12 & s2 & ~ CNT7 & s_C2) | (s13 & s4 & ~ CNT7 & s_C2));
   assign \c7.5  = (s12 & s1 & C3);
   assign s9 = (((scad | adun) & s5) | (s5 & CNT7));
@@ -270,7 +271,6 @@ module ALU_CU (
     .S( s17 ),
     .Q( s14 )
   );
-  assign c1 = (s14 & s1);
   assign c2 = (s14 & s2);
   assign s7 = (s5 & s14);
   assign s15 = (s2 & C3);
@@ -786,6 +786,7 @@ module ALU (
   wire s23;
   wire s24;
   wire [3:0] s25;
+  wire [1:0] s26;
   assign s24 = (op[0] & op[1]);
   ALU_CU ALU_CU_i0 (
     .BGN( \Begin  ),
@@ -887,6 +888,8 @@ module ALU (
   assign s22[6] = c3;
   assign s22[7] = c3;
   assign cnt7 = (~ s25[0] & ~ s25[1] & ~ s25[2] & s25[3]);
+  assign s26[0] = c7;
+  assign s26[1] = c8;
   assign s0 = (s6 ^ s5);
   DIG_D_FF_1bit #(
     .Default(0)
@@ -928,25 +931,28 @@ module ALU (
     .en( s3 ),
     .Q( Q )
   );
-  DriverBus #(
-    .Bits(8)
-  )
-  DriverBus_i11 (
-    .in( add ),
-    .sel( c3 ),
-    .out( outbus )
-  );
   // A
   DIG_Register_BUS #(
     .Bits(8)
   )
-  DIG_Register_BUS_i12 (
+  DIG_Register_BUS_i11 (
     .D( s8 ),
     .C( CLk ),
     .en( s9 ),
     .Q( A )
   );
   assign in = ((add & s22) | (~ s22 & A));
+  Mux_4x1_NBits #(
+    .Bits(8)
+  )
+  Mux_4x1_NBits_i12 (
+    .sel( s26 ),
+    .in_0( 8'b0 ),
+    .in_1( A ),
+    .in_2( Q ),
+    .in_3( 8'b0 ),
+    .out( outbus )
+  );
   assign \Q[0]  = Q[0];
   assign s15 = Q[7:1];
   assign s16 = A[6:0];
