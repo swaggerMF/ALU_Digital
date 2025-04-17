@@ -69,7 +69,18 @@ module tb_RCA8;
     RST=0;#30;
     inbus=25;#20;
 	#1500;
-
+    Begin=0;#10;
+	//impartirea
+    Begin=1;  
+    op=3;
+    RST=0;#20;
+    RST=1;#20;
+    RST=0;
+    inbus=8'b00001001;#10;
+    inbus=8'b10011001;#20;
+   
+    inbus=25;
+	#1500;
     $finish;
   end
 
