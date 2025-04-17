@@ -954,8 +954,8 @@ module ALU_2 (
   Mux_4x1_NBits_i12 (
     .sel( s21 ),
     .in_0( 8'b0 ),
-    .in_1( O_Q ),
-    .in_2( O_A ),
+    .in_1( O_A ),
+    .in_2( O_Q ),
     .in_3( 8'b0 ),
     .out( outbus )
   );

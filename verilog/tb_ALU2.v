@@ -4,7 +4,7 @@
 
 `timescale 1ns / 1ps
 
-module tb_ALU2;
+module tb_RCA8;
 
   // Declararea semnalelor
   reg CLk;
@@ -40,7 +40,7 @@ module tb_ALU2;
 
     // Inițializare
     //adunarea
-   	op=0;
+    op=0;
     inbus=24;
 	Begin=1;
     RST=0;#20;
@@ -51,14 +51,25 @@ module tb_ALU2;
     Begin=0;#10;
     //scaderea
     Begin=1;
+    op=1;
     RST=0;#20;
     RST=1;#20;
     RST=0;
-    inbus=25;#20;
-	op=1;
+    inbus=99;#20;
     #20;
-    inbus=16;
-    #200
+    inbus=55;
+    #150
+    Begin=0;#10;
+	//inmultirea
+   	Begin=1;
+    op=2;
+    inbus=32;
+    RST=0;#20;
+    RST=1;#20;
+    RST=0;#30;
+    inbus=25;#20;
+	#1500;
+
     $finish;
   end
 
