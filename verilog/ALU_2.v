@@ -753,7 +753,7 @@ module ALU_2 (
   wire c7;
   wire c8;
   wire c6;
-  wire c7.5 ;
+  wire c7_5 ;
   wire [7:0] s0;
   wire [7:0] O_A;
   wire [7:0] add;
@@ -791,7 +791,7 @@ module ALU_2 (
     .RST( RST ),
     .CLK( CLk ),
     .CNT7( cnt7 ),
-    .Q_0( Q_0  ),
+    .Q0( Q_0  ),
     .Q_1 ( Q_1  ),
     .A7( A7  ),
     .OP( op ),
