@@ -432,120 +432,43 @@ module RCA8 (
   output c_out,
   output [7:0] Z
 );
-  wire s0;
-  wire s1;
-  wire s2;
-  wire s3;
-  wire s4;
-  wire s5;
-  wire s6;
-  wire s7;
-  wire s8;
-  wire s9;
-  wire s10;
-  wire s11;
-  wire s12;
-  wire s13;
-  wire s14;
-  wire s15;
-  wire s16;
-  wire s17;
-  wire s18;
-  wire s19;
-  wire s20;
-  wire s21;
-  wire s22;
-  wire s23;
-  wire s24;
-  wire s25;
-  wire s26;
-  wire s27;
-  wire s28;
-  wire s29;
-  wire s30;
-  assign s29 = Y[0];
-  assign s25 = Y[1];
-  assign s21 = Y[2];
-  assign s17 = Y[3];
-  assign s13 = Y[4];
-  assign s9 = Y[5];
-  assign s5 = Y[6];
-  assign s1 = Y[7];
-  assign s28 = X[0];
-  assign s24 = X[1];
-  assign s20 = X[2];
-  assign s16 = X[3];
-  assign s12 = X[4];
-  assign s8 = X[5];
-  assign s4 = X[6];
-  assign s0 = X[7];
-  FAC FAC_i0 (
-    .X( s28 ),
-    .Y( s29 ),
-    .C_in( c_in ),
-    .Cout( s26 ),
-    .Z( s30 )
-  );
-  FAC FAC_i1 (
-    .X( s24 ),
-    .Y( s25 ),
-    .C_in( s26 ),
-    .Cout( s22 ),
-    .Z( s27 )
-  );
-  FAC FAC_i2 (
-    .X( s20 ),
-    .Y( s21 ),
-    .C_in( s22 ),
-    .Cout( s18 ),
-    .Z( s23 )
-  );
-  FAC FAC_i3 (
-    .X( s16 ),
-    .Y( s17 ),
-    .C_in( s18 ),
-    .Cout( s14 ),
-    .Z( s19 )
-  );
-  FAC FAC_i4 (
-    .X( s12 ),
-    .Y( s13 ),
-    .C_in( s14 ),
-    .Cout( s10 ),
-    .Z( s15 )
-  );
-  FAC FAC_i5 (
-    .X( s8 ),
-    .Y( s9 ),
-    .C_in( s10 ),
-    .Cout( s6 ),
-    .Z( s11 )
-  );
-  FAC FAC_i6 (
-    .X( s4 ),
-    .Y( s5 ),
-    .C_in( s6 ),
-    .Cout( s2 ),
-    .Z( s7 )
-  );
-  FAC FAC_i7 (
-    .X( s0 ),
-    .Y( s1 ),
-    .C_in( s2 ),
-    .Cout( c_out ),
-    .Z( s3 )
-  );
-  assign Z[0] = s30;
-  assign Z[1] = s27;
-  assign Z[2] = s23;
-  assign Z[3] = s19;
-  assign Z[4] = s15;
-  assign Z[5] = s11;
-  assign Z[6] = s7;
-  assign Z[7] = s3;
+  wire [6:0] carry;
+
+  genvar i;
+  generate
+    for (i = 0; i < 8; i = i + 1) begin : v
+      if (i == 0) begin
+        FAC FAC_i (
+          .X(X[i]),
+          .Y(Y[i]),
+          .C_in(c_in),
+          .Cout(carry[i]),
+          .Z(Z[i])
+        );
+      end else if (i == 7) begin
+        FAC FAC_i (
+          .X(X[i]),
+          .Y(Y[i]),
+          .C_in(carry[i-1]),
+          .Cout(c_out),
+          .Z(Z[i])
+        );
+      end else begin
+        FAC FAC_i (
+          .X(X[i]),
+          .Y(Y[i]),
+          .C_in(carry[i-1]),
+          .Cout(carry[i]),
+          .Z(Z[i])
+        );
+      end
+    end
+  endgenerate
 endmodule
-module 
-JK_FF
+
+
+
+module JK_FF
 #(
     parameter Default = 1'b0
 )
@@ -576,6 +499,7 @@ JK_FF
 endmodule
 
 
+
 module shf2 (
   input CLK,
   input SR,
@@ -588,129 +512,62 @@ module shf2 (
   output O_sl,
   output [7:0] O
 );
-  wire s0;
-  wire s1;
-  wire O_sl_temp;
-  wire s2;
-  wire s3;
-  wire s4;
-  wire s5;
-  wire s6;
-  wire s7;
-  wire s8;
-  wire s9;
-  wire s10;
-  wire s11;
-  wire O_sr_temp;
-  wire s12;
-  wire s13;
-  wire s14;
-  wire s15;
-  wire s16;
-  wire s17;
-  wire s18;
-  wire s19;
-  wire s20;
-  wire s21;
-  assign s1 = ((IN_SR & SR) | (IN[7] & LD) | (SL & s0));
-  assign s3 = ((O_sl_temp & SR) | (IN[6] & LD) | (SL & s2));
-  assign s5 = ((s0 & SR) | (IN[5] & LD) | (SL & s4));
-  assign s7 = ((s2 & SR) | (IN[4] & LD) | (SL & s6));
-  assign s9 = ((s4 & SR) | (IN[3] & LD) | (SL & s8));
-  assign s11 = ((s6 & SR) | (IN[2] & LD) | (SL & s10));
-  assign s12 = ((s8 & SR) | (IN[1] & LD) | (SL & O_sr_temp));
-  assign s13 = ((s10 & SR) | (IN[0] & LD) | (SL & IN_SL));
-  assign s14 = ~ s1;
-  assign s15 = ~ s3;
-  assign s16 = ~ s5;
-  assign s17 = ~ s7;
-  assign s18 = ~ s9;
-  assign s19 = ~ s11;
-  assign s20 = ~ s12;
-  assign s21 = ~ s13;
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i0 (
-    .J( s1 ),
-    .C( CLK ),
-    .K( s14 ),
-    .Q( O_sl_temp )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i1 (
-    .J( s3 ),
-    .C( CLK ),
-    .K( s15 ),
-    .Q( s0 )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i2 (
-    .J( s5 ),
-    .C( CLK ),
-    .K( s16 ),
-    .Q( s2 )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i3 (
-    .J( s7 ),
-    .C( CLK ),
-    .K( s17 ),
-    .Q( s4 )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i4 (
-    .J( s9 ),
-    .C( CLK ),
-    .K( s18 ),
-    .Q( s6 )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i5 (
-    .J( s11 ),
-    .C( CLK ),
-    .K( s19 ),
-    .Q( s8 )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i6 (
-    .J( s12 ),
-    .C( CLK ),
-    .K( s20 ),
-    .Q( s10 )
-  );
-  JK_FF #(
-    .Default(0)
-  )
-  JK_FF_i7 (
-    .J( s13 ),
-    .C( CLK ),
-    .K( s21 ),
-    .Q( O_sr_temp )
-  );
-  assign O[0] = O_sr_temp;
-  assign O[1] = s10;
-  assign O[2] = s8;
-  assign O[3] = s6;
-  assign O[4] = s4;
-  assign O[5] = s2;
-  assign O[6] = s0;
-  assign O[7] = O_sl_temp;
-  assign O_sr = O_sr_temp;
-  assign O_sl = O_sl_temp;
+  wire [7:0] q;
+  wire [7:0] j;
+  wire [7:0] k;
+
+  wire [7:0] left_in;
+  wire [7:0] right_in;
+
+  // === Shift left sources ===
+  assign left_in[0] = IN_SL;
+  assign left_in[1] = q[0];
+  assign left_in[2] = q[1];
+  assign left_in[3] = q[2];
+  assign left_in[4] = q[3];
+  assign left_in[5] = q[4];
+  assign left_in[6] = q[5];
+  assign left_in[7] = q[6];
+
+  // === Shift right sources ===
+  assign right_in[0] = q[1];
+  assign right_in[1] = q[2];
+  assign right_in[2] = q[3];
+  assign right_in[3] = q[4];
+  assign right_in[4] = q[5];
+  assign right_in[5] = q[6];
+  assign right_in[6] = q[7];
+  assign right_in[7] = IN_SR;
+
+  // === Generate loop for flip-flops ===
+  genvar i;
+  generate
+    for (i = 0; i < 8; i = i + 1) begin : v_shft
+      wire sr_part, sl_part, ld_part;
+
+      assign sr_part = SR & right_in[i];
+      assign sl_part = SL & left_in[i];
+      assign ld_part = LD & IN[i];
+
+      assign j[i] = sr_part | sl_part | ld_part;
+      assign k[i] = ~j[i];
+
+      JK_FF #(.Default(0)) FF (
+        .J(j[i]),
+        .K(k[i]),
+        .C(CLK),
+        .Q(q[i])
+      );
+    end
+  endgenerate
+
+  assign O = q;
+  assign O_sr = q[0];
+  assign O_sl = q[7];
+
 endmodule
+
+
 
 module Mux_2x1
 (
