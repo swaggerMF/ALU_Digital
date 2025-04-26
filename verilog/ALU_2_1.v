@@ -1,22 +1,22 @@
+
 module RS_FF (
   input R,
   input S,
   output Q,
   output nQ 
 );
-  wire nQ_temp ;
+  wire nQ_temp;
   wire Q_temp;
-  assign Q_temp = ~ (R | nQ_temp );
-  assign nQ_temp  = ~ (Q_temp | S);
+
+  assign Q_temp = ~(R | nQ_temp); // setare/resetare
+  assign nQ_temp = ~(Q_temp | S);
+
   assign Q = Q_temp;
-  assign nQ  = nQ_temp ;
+  assign nQ = nQ_temp;
 endmodule
 
-module JK_FF_AS
-#(
-    parameter Default = 1'b0
-)
-(
+// JK Flip-Flop asincron cu preset si clear 
+module JK_FF_AS #(parameter Default = 1'b0)(
    input Set,
    input J,
    input C,
@@ -32,15 +32,15 @@ module JK_FF_AS
 
     always @ (posedge C or posedge Clr or posedge Set) begin
         if (Set)
-            state <= 1'b1;
+            state <= 1'b1; // Q = 1 la set
         else if (Clr)
-            state <= 1'b0;
+            state <= 1'b0; // Q = 0 la reset
         else if (~J & K)
             state <= 1'b0;
         else if (J & ~K)
             state <= 1'b1;
         else if (J & K)
-            state <= ~state;
+            state <= ~state; // toggle
     end
 
     initial begin
@@ -48,11 +48,8 @@ module JK_FF_AS
     end
 endmodule
 
-module JK_FF
-#(
-    parameter Default = 1'b0
-)
-(
+// JK Flip-Flop sincron, fara Set/Clr
+module JK_FF #(parameter Default = 1'b0)(
    input J,
    input C,
    input K,
@@ -78,6 +75,7 @@ module JK_FF
     end
 endmodule
 
+// D Flip-Flop cu reset asincron
 module D_FF ( 
   input D,
   input CLK,
@@ -85,32 +83,28 @@ module D_FF (
   output Q,
   output nQ 
 );
-  wire s0;
-  wire s1;
-  wire s2;
-  wire s3;
-  wire nQ_temp ;
-  wire Q_temp;
-  assign s2 = ~ R;
-  assign s1 = ~ (~ (s0 & s1) & CLK & s2);
-  assign s3 = ~ (s1 & CLK & s0);
-  assign s0 = ~ (s3 & D & s2);
-  assign nQ_temp  = ~ (Q_temp & s3 & s2);
-  assign Q_temp = ~ (s1 & nQ_temp );
+  wire s0, s1, s2, s3;
+  wire nQ_temp, Q_temp;
+
+  assign s2 = ~R;
+  assign s1 = ~(~(s0 & s1) & CLK & s2);
+  assign s3 = ~(s1 & CLK & s0);
+  assign s0 = ~(s3 & D & s2);
+  assign nQ_temp = ~(Q_temp & s3 & s2);
+  assign Q_temp = ~(s1 & nQ_temp);
+
   assign Q = Q_temp;
-  assign nQ  = nQ_temp ;
+  assign nQ = nQ_temp;
 endmodule
 
-module Mux_4to1 #(
-    parameter Bits = 2
-)
-(
+
+module Mux_4to1 #(parameter Bits = 2)(
     input [1:0] sel,
-    input [(Bits - 1):0] in_0,
-    input [(Bits - 1):0] in_1,
-    input [(Bits - 1):0] in_2,
-    input [(Bits - 1):0] in_3,
-    output reg [(Bits - 1):0] out
+    input [(Bits-1):0] in_0,
+    input [(Bits-1):0] in_1,
+    input [(Bits-1):0] in_2,
+    input [(Bits-1):0] in_3,
+    output reg [(Bits-1):0] out
 );
     always @ (*) begin
         case (sel)
@@ -118,14 +112,13 @@ module Mux_4to1 #(
             2'h1: out = in_1;
             2'h2: out = in_2;
             2'h3: out = in_3;
-            default:
-                out = 'h0;
+            default: out = 'h0; // valoare implicita
         endcase
     end
 endmodule
 
-module Mux_2to1
-(
+
+module Mux_2to1(
     input [0:0] sel,
     input in_0,
     input in_1,
@@ -135,25 +128,20 @@ module Mux_2to1
         case (sel)
             1'h0: out = in_0;
             1'h1: out = in_1;
-            default:
-                out = 'h0;
+            default: out = 'h0;
         endcase
     end
 endmodule
 
-module counter_nbit #(
-  parameter N = 4,          // număr de biți
-  parameter INIT = 0        // valoare inițială
-)(
-  input CNT,                // enable count
-  input CLK,                // clock global
-  input RST,                // reset asincron
-  output [N-1:0] OUT         // output counter
-);
 
-  wire [N-1:0] s;            // flip-flop outputs
-  wire [N-1:0] nQ;           // complement outputs
-  wire RST_N;                // reset intern
+module counter_nbit #(parameter N = 4, parameter INIT = 0)(
+  input CNT,
+  input CLK,
+  input RST,
+  output [N-1:0] OUT
+);
+  wire [N-1:0] s, nQ;
+  wire RST_N;
 
   genvar i;
   generate
@@ -162,14 +150,12 @@ module counter_nbit #(
       if (i == 0)
         assign enable = CNT;
       else
-        assign enable = CNT & (&s[i-1:0]);   // toate precedentele sunt 1
+        assign enable = CNT & (&s[i-1:0]); // Toate precedentele pe 1
 
-      JK_FF_AS #(
-        .Default(INIT)
-      ) JK_FF_AS_i (
+      JK_FF_AS #(.Default(INIT)) JK_FF_AS_i (
         .Set(1'b0),
         .J(enable),
-        .C(CLK),       // toti primesc CLK global
+        .C(CLK),
         .K(enable),
         .Clr(RST_N),
         .Q(s[i]),
@@ -178,25 +164,18 @@ module counter_nbit #(
     end
   endgenerate
 
-  // Reset-ul combinat
-  assign RST_N = ( &s ) | RST;
-
-  // Ieșirea
+  assign RST_N = (&s) | RST; // reset cand toti sunt 1 sau manual
   assign OUT = s;
-
 endmodule
 
-module DriverBus#(
-    parameter Bits = 2
-)
-(
+// Driver pentru magistrală
+module DriverBus#(parameter Bits = 2)(
     input [(Bits-1):0] in,
     input sel,
     output [(Bits-1):0] out
 );
-    assign out = (sel == 1'b1)? in : {Bits{1'bz}};
+	assign out = (sel == 1'b1)? in : {Bits{1'bz}};
 endmodule
-
 
 
 module Register #(
@@ -374,6 +353,9 @@ endmodule
   wire fi3;
   wire fi4;
   wire fi5;
+  wire out_Cycle0;
+  wire rset_Cycle0;
+  wire set_Cycle0;
   wire rset_Cycle_1_8;
   wire set_Cycle_1_8;
   wire out_Cycle_1_8;
@@ -384,12 +366,11 @@ endmodule
   wire imp;
   wire adun;
   wire scad;
-  wire out_Cycle0;
+ 
   wire c3_temp;
   wire set_END;
   wire c8_temp;
-  wire rset_Cycle0;
-  wire set_Cycle0;
+ 
 
    assign inm = (~ OP[0] & OP[1]);
    assign imp = (OP[0] & OP[1]);
@@ -419,8 +400,8 @@ endmodule
    assign c6 = ((inm & fi2 & ~ CNT7 & out_Cycle_1_8) | (imp & fi4 & ~ CNT7 & out_Cycle_1_8));
    assign c7_5  = (inm & fi1 & out_Cycle9);
    assign set_Cycle9 = (((scad | adun) & fi5) | (fi5 & CNT7));
-  assign rset_Cycle0 = (RST | set_Cycle_1_8);
-  assign rset_Cycle_1_8 = (RST | set_Cycle9);
+   assign rset_Cycle0 = (RST | set_Cycle_1_8);
+   assign rset_Cycle_1_8 = (RST | set_Cycle9);
    assign rset_Cycle9 = (END  | RST);
    assign set_Cycle0 = (~ out_Cycle_1_8 & ~ out_Cycle9 & ~ END  & ~ (fi5 & BGN));
    RS_FF RS_FF_i1 ( //ff care mentine semnalul c8 cat sa se activeze END
@@ -428,26 +409,30 @@ endmodule
     .S( set_END ),
     .Q( c8_temp )
   );
-  assign END = c8_temp;
-   RS_FF RS_FF_i2 ( //ff Cycle 9
-    .R( rset_Cycle9 ),
-    .S( set_Cycle9 ),
-     .Q( out_Cycle9 )
-  );
- 
-   RS_FF RS_FF_i3 ( //ff Cycle 0
+   
+  RS_FF RS_FF_i3 ( //ff Cycle 0
     .R( rset_Cycle0 ),
     .S( set_Cycle0 ),
     .Q( out_Cycle0 )
   );
+   
    assign c2 = (out_Cycle0 & fi2);
    assign set_Cycle_1_8 = (fi5 & out_Cycle0);
-   assign set_END = (fi2 & out_Cycle9);
+   
    RS_FF RS_FF_i4 ( //ff Cycle 1-8
     .R( rset_Cycle_1_8 ),
     .S( set_Cycle_1_8 ),
     .Q( out_Cycle_1_8 )
   );
+   
+   assign END = c8_temp;
+   RS_FF RS_FF_i2 ( //ff Cycle 9
+    .R( rset_Cycle9 ),
+    .S( set_Cycle9 ),
+     .Q( out_Cycle9 )
+  );
+   
+  assign set_END = (fi2 & out_Cycle9);
   assign c3 = c3_temp;
   assign c8 = c8_temp;
 endmodule
