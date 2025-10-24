@@ -1,0 +1,169 @@
+module RS_FF (
+  input R,
+  input S,
+  output Q,
+  output nQ 
+);
+  wire nQ_temp ;
+  wire Q_temp;
+  assign Q_temp = ~ (R | nQ_temp );
+  assign nQ_temp  = ~ (Q_temp | S);
+  assign Q = Q_temp;
+  assign nQ  = nQ_temp ;
+endmodule
+
+module DIG_JK_FF_AS
+#(
+    parameter Default = 1'b0
+)
+(
+   input Set,
+   input J,
+   input C,
+   input K,
+   input Clr,
+   output Q,
+   output nQ
+);
+    reg state;
+
+    assign Q = state;
+    assign nQ = ~state;
+
+    always @ (posedge C or posedge Clr or posedge Set) begin
+        if (Set)
+            state <= 1'b1;
+        else if (Clr)
+            state <= 1'b0;
+        else if (~J & K)
+            state <= 1'b0;
+        else if (J & ~K)
+            state <= 1'b1;
+        else if (J & K)
+            state <= ~state;
+    end
+
+    initial begin
+        state = Default;
+    end
+endmodule
+
+module counter3 (
+  input CNT,
+  input CLK,
+  input RST,
+  output [2:0] OUT
+);
+  wire s0;
+  wire s1;
+  wire s2;
+  wire RST_N;
+  wire s3;
+  wire s4;
+  DIG_JK_FF_AS #(
+    .Default(0)
+  )
+  DIG_JK_FF_AS_i0 (
+    .Set( 1'b0 ),
+    .J( CNT ),
+    .C( CLK ),
+    .K( CNT ),
+    .Clr( RST_N ),
+    .Q( s0 ),
+    .nQ ( s3 )
+  );
+  DIG_JK_FF_AS #(
+    .Default(0)
+  )
+  DIG_JK_FF_AS_i1 (
+    .Set( 1'b0 ),
+    .J( CNT ),
+    .C( s3 ),
+    .K( CNT ),
+    .Clr( RST_N ),
+    .Q( s1 ),
+    .nQ ( s4 )
+  );
+  DIG_JK_FF_AS #(
+    .Default(0)
+  )
+  DIG_JK_FF_AS_i2 (
+    .Set( 1'b0 ),
+    .J( CNT ),
+    .C( s4 ),
+    .K( CNT ),
+    .Clr( RST_N ),
+    .Q( s2 )
+  );
+  assign RST_N = ((s2 & s1 & ~s0) | RST);
+  assign OUT[0] = s0;
+  assign OUT[1] = s1;
+  assign OUT[2] = s2;
+endmodule
+
+module Dec3to5 (
+  input [2:0]sel,
+  output O0,
+  output O1,
+  output O2,
+  output O3,
+  output O4,
+  output O5
+);
+  wire s0;
+  wire s1;
+  wire s2;
+  wire s3;
+  wire s4;
+  wire s5;
+  assign s3 = sel[0];
+  assign s4 = sel[1];
+  assign s5 = sel[2];
+  assign s2 = ~ s5;
+  assign s1 = ~ s4;
+  assign s0 = ~ s3;
+  assign O0 = (s0 & s1 & s2);
+  assign O1 = (s2 & s1 & s3);
+  assign O2 = (s2 & s4 & s0);
+  assign O3 = (s2 & s4 & s3);
+  assign O4 = (s5 & s1 & s0);
+  assign O5 = (s5 & s1 & s3);
+endmodule
+
+module sequnceCNTmod (
+  input CLK,
+  input BGN,
+  input RST,
+  input END ,
+  output fi0 ,
+  output fi1 ,
+  output fi2 ,
+  output fi3 ,
+  output fi4 ,
+  output fi5 
+);
+  wire s0;
+  wire s1;
+  wire [2:0] s2;
+  RS_FF RS_FF_i0 (
+    .R( END  ),
+    .S( BGN ),
+    .Q( s0 )
+  );
+  assign s1 = (s0 & RST);
+  counter3 counter3_i1 (
+    .CNT( s0 ),
+    .CLK( CLK ),
+    .RST( s1 ),
+    .OUT( s2 )
+  );
+  Dec3to5 Dec3to5_i2 (
+    .sel( s2 ),
+    .O0( fi0  ),
+    .O1( fi1  ),
+    .O2( fi2  ),
+    .O3( fi3  ),
+    .O4( fi4  ),
+    .O5( fi5  )
+  );
+endmodule
