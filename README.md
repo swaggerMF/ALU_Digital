@@ -24,7 +24,6 @@ Documentation
 ├── /docs                # Additional documentation
 ├── README.md            # This file
 ├── ControlUnitALU.circ  # Logisim circuit for hardware implementation
-└── Makefile             # Optional, for running tests
 ```
 
 
