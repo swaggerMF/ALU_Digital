@@ -16,6 +16,7 @@ Testing using Verilog testbenches
 
 Documentation
 
+## Project Structure
 ```
 /alu-design
 ├── /src                 # Verilog source code (in active development)
