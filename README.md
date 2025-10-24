@@ -19,7 +19,7 @@ Documentation
 ## Project Structure
 ```
 /alu-design
-├── /src                 # Verilog source code (in active development)
+├── /src                 # Verilog source code 
 ├── /testbenches         # Tests and verification
 ├── /docs                # Additional documentation
 ├── README.md            # This file
