@@ -16,8 +16,7 @@ Testing using Verilog testbenches
 
 Documentation
 
-<details> <summary><b>Project Structure</b></summary>
-
+```
 /alu-design
 ├── /src                 # Verilog source code (in active development)
 ├── /testbenches         # Tests and verification
@@ -25,7 +24,7 @@ Documentation
 ├── README.md            # This file
 ├── ControlUnitALU.circ  # Logisim circuit for hardware implementation
 └── Makefile             # Optional, for running tests
-</details>
+```
 
 
 ## Contributions
