@@ -1,10 +1,10 @@
-#CN_ALU
-#ALU Design — Verilog Implementation
-##Description
+# CN_ALU
+# ALU Design — Verilog Implementation
+## Description
 
 This project represents the design and implementation of an Arithmetic Logic Unit (ALU) using the Verilog language. It is a collaborative effort aimed at developing a functional ALU optimized for various arithmetic and logic operations.
 
-##Features
+## Features
 
 Modular implementation in Verilog
 
@@ -16,7 +16,7 @@ Testing using Verilog testbenches
 
 Documentation
 
-##Project Structure
+## Project Structure
 
 /alu-design
 │── /src                 # Verilog source code (in active development)
@@ -27,7 +27,7 @@ Documentation
 │── Makefile             # Optional, for running tests
 
 
-##Contributions
+## Contributions
 
 This project is a collaboration by:
 - **Vintan Iulia** ([GitHub](https://github.com/iuliavintan))
